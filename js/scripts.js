@@ -7,39 +7,56 @@ $(document).ready(function() {
         // alert(words);
      
         
-        // The following variale is a boolean that asserts if letter is a consonant
-        function isConsonant(letter) {
-            return letter === "b" || letter === "c" || letter === "d" || letter === "f" || letter === "g" || letter === "h" || letter === "j" || letter === "k" || letter === "l" || letter === "m" || letter === "n" || letter === "p" || letter === "q" || letter === "r" || letter === "s" || letter === "t" || letter === "v" || letter === "w" || letter === "x" || letter === "y" || letter === "z" || letter === "B" || letter === "C" || letter === "D" || letter === "F" || letter === "G" || letter === "H" || letter === "J" || letter === "K" || letter === "L" || letter === "M" || letter === "N" || letter === "P" || letter === "Q" || letter === "R" || letter === "S" || letter === "T" || letter === "V" || letter === "W" || letter === "X" || letter === "Y" || letter === "Z";
-        };
+        // // The following variale is a boolean that asserts if letter is a consonant
+        // function isConsonant(letter) {
+        //     return !isVowel(letter);
+        // };
         
         
         // The following variable is a boolean (true or false) that asserts that a letter (as displayed) is a vowel or not (isVowel)
         function isVowel(letter) {
             return letter === "a" || letter === "e" || letter === "i" || letter === "o" || letter === "u" || letter === "A" || letter === "E" || letter === "I" || letter === "O" || letter === "U";
         };
+
+        function isVowelOrY(letter) {
+            return isVowel(letter) || letter === 'y' || letter === 'Y';
+        }
         
-        debugger;
-        isVowel("x");
-        isConsonant("A");
-        isVowel("I");
-        isConsonant("b");
-        
-        words.map(function(word){ 
+        // debugger;
+        // isVowel("x");
+        // isConsonant("A");
+        // isVowel("I");
+        // isConsonant("b");
+
+        // other -> otherway
+        // queen -> eenquay
+        // yes -> esyay
+        // straight -> aightstray
+        // this -> isthay
+        //// Something's different here....
+        // my -> ymay
+        // ymy -> yymay
+        // this. -> isthay.
+        // thyme -> ymethay
+        var resultingSentence = words.map(function(word){ 
             if(isVowel(word[0])) {
               return word + "way";
              }
-            if (word[0] == 'q' && word[1] == 'u') {
-                  return word.slice(2) + 'quay';
+            if (word[0] === 'q' && word[1] === 'u' || word[0] === "Q" && word[1] === "u") {
+              return word.slice(2) + word.slice(0,2) + 'ay';
               }
-          // ex: stop -> opstay
-          var takeUntilIndex = 0;
-          for (var index = 0; !isVowel(word[index]); index++){
-            takeUntilIndex++;
-          }
-          return word.slice(takeUntilIndex) + word.slice(0, takeUntilIndex) + 'ay';
-          })
-        
-        
+
+            if (word[0] === "y" || word[0] === "Y" || !isVowel(word[0])) {
+                var wordIndex = 1;
+                // for (var index = 1; word[index] !== 'y' && word[index] !== 'Y' && !isVowel(word[index]); index++){
+                for (var index = 1; index < word.length && !isVowelOrY(word[index]); index++){
+                    wordIndex++;
+                }
+                return word.slice(wordIndex) + word.slice(0, wordIndex) + 'ay';
+            }
+        });
+
+        $("#resultingSentence").append("<p>" + resultingSentence.join(' ') + "</p>");
         
         event.preventDefault();
     });
